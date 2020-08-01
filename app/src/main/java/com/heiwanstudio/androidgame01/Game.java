@@ -13,8 +13,8 @@ import androidx.core.content.ContextCompat;
 
 class Game extends SurfaceView implements SurfaceHolder.Callback {
 
+    private final Player player;
     private GameLoop gameLoop;
-    private Context context;
 
     public Game(Context context) {
         super(context);
@@ -22,9 +22,11 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
 
-        this.context = context;
         gameLoop = new GameLoop(this, surfaceHolder);
-
+        //init player
+        player = new Player(100,0);
+        //draw map
+        
         setFocusable(true);
     }
 
@@ -48,12 +50,14 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
         super.draw(canvas);
         drawUPS(canvas);
         drawFPS(canvas);
+
+        player.draw(canvas);
     }
 
     public void drawUPS(Canvas canvas) {
         String avarageUPS = Double.toString(gameLoop.getAvarageUPS());
         Paint paint = new Paint();
-        int color = ContextCompat.getColor(context, R.color.mantis);
+        int color = ContextCompat.getColor(getContext(), R.color.mantis);
         paint.setColor(color);
         paint.setTextSize(42);
         canvas.drawText("UPS: " + avarageUPS, 60, 80, paint);
@@ -62,13 +66,13 @@ class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void drawFPS(Canvas canvas) {
         String avarageFPS = Double.toString(gameLoop.getAvarageFPS());
         Paint paint = new Paint();
-        int color = ContextCompat.getColor(context, R.color.mantis);
+        int color = ContextCompat.getColor(getContext(), R.color.mantis);
         paint.setColor(color);
         paint.setTextSize(42);
         canvas.drawText("FPS: " + avarageFPS, 60, 190, paint);
     }
 
     public void update() {
-
+        player.update();
     }
 }
